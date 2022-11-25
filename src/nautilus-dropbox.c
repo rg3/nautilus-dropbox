@@ -360,8 +360,13 @@ nautilus_dropbox_finish_file_info_command(DropboxFileInfoCommandResponse *dficr)
 	(status = g_hash_table_lookup(dficr->emblems_response, "emblems")) != NULL) {
       int i;
       for ( i = 0; status[i] != NULL; i++) {
-	  if (status[i][0])
-	    nautilus_file_info_add_emblem(dficr->dfic->file, status[i]);
+          if (status[i][0])
+          {
+              gchar *emblem = status[i];
+              if (g_strcmp0(emblem, "people") == 0)
+                  emblem = "shared";
+              nautilus_file_info_add_emblem(dficr->dfic->file, emblem);
+          }
       }
       result = NAUTILUS_OPERATION_COMPLETE;
     }
